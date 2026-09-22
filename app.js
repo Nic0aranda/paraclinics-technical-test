@@ -1,6 +1,6 @@
 //variables para consumo de productos
 let todosLosProductos = [];
-const URL_API = 'https://dummyjson.com/products';
+const URL_API = 'https://dummyjson.com/products?limit=100';
 
 //variables DOM
 const cuerpoTabla = document.getElementById('cuerpo-tabla');
