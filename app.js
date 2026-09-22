@@ -1,5 +1,10 @@
 //variables para consumo de productos
 let todosLosProductos = [];
+let productosMostrados = [];
+let ordenActual = {
+    campo: 'title',
+    direccion: 'asc'
+};
 const URL_API = 'https://dummyjson.com/products?limit=100';
 
 //variables DOM
@@ -50,8 +55,40 @@ async function obtenerProductos() {
 
 obtenerProductos();
 
+//funcion para comparar productos por campo
+function compararProductos(a, b, campo) {
+    const valorA = a[campo];
+    const valorB = b[campo];
+    
+    // Comparación para campos numéricos
+    if (campo === 'price' || campo === 'stock') {
+        return Number(valorA) - Number(valorB);
+    }
+    // Comparación para campos de texto (case insensitive)
+    return String(valorA).localeCompare(String(valorB), 'es', { sensitivity: 'base' });
+}
+
+//funcion para ordenar productos por campo
+function ordenarProductos(campo) {
+    const direccion = (
+        ordenActual.campo === campo && ordenActual.direccion === 'asc'
+    ) ? 'desc' : 'asc';
+
+    ordenActual = { campo, direccion };
+
+    // Ordenar el arreglo de productos mostrados
+    productosMostrados = [...productosMostrados].sort((a, b) => {
+        const resultado = compararProductos(a, b, campo);
+        return direccion === 'asc' ? resultado : -resultado;
+    });
+
+    renderizarTabla(productosMostrados);
+}
+
 //funcion para renderizar la tabla donde le entregamos un arreglo de productos y la renderiza en el DOM
 function renderizarTabla(productos) {
+    productosMostrados = productos;
+
     // Limpiar el contenido actual de la tabla
     cuerpoTabla.innerHTML = '';
 
@@ -92,13 +129,21 @@ function renderizarTabla(productos) {
 //funcion para filtrar los productos por nombre
 buscador.addEventListener('input', (evento) => {
     const textoBusqueda = evento.target.value.toLowerCase();
-    
-    const productosFiltrados = todosLosProductos.filter(producto => 
+
+    const productosFiltrados = todosLosProductos.filter(producto =>
         producto.title.toLowerCase().includes(textoBusqueda)
     );
 
     // Renderizamos la tabla solo con los que coinciden
     renderizarTabla(productosFiltrados);
+});
+
+//funcion para ordenar los productos al hacer click en el encabezado de la tabla
+document.querySelectorAll('.ordenable').forEach(th => {
+    th.addEventListener('click', () => {
+        const campo = th.dataset.columna;
+        ordenarProductos(campo);
+    });
 });
 
 // Inicializar la carga de datos cuando el HTML esté listo
