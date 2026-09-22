@@ -89,3 +89,17 @@ function renderizarTabla(productos) {
     });
 }
 
+//funcion para filtrar los productos por nombre
+buscador.addEventListener('input', (evento) => {
+    const textoBusqueda = evento.target.value.toLowerCase();
+    
+    const productosFiltrados = todosLosProductos.filter(producto => 
+        producto.title.toLowerCase().includes(textoBusqueda)
+    );
+
+    // Renderizamos la tabla solo con los que coinciden
+    renderizarTabla(productosFiltrados);
+});
+
+// Inicializar la carga de datos cuando el HTML esté listo
+document.addEventListener('DOMContentLoaded', obtenerProductos);
