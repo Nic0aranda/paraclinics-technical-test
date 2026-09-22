@@ -41,12 +41,18 @@ body {
 /* Buscador Centrado */
 .controles {
     margin: 0 auto 25px auto;
-    max-width: 600px;
+    max-width: 700px;
     text-align: center;
 }
 
+.buscador-wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
 #buscador {
-    width: 100%;
+    flex: 1;
     padding: 12px 15px;
     font-size: 16px;
     border: 1px solid var(--color-borde);
@@ -57,6 +63,20 @@ body {
 
 #buscador:focus {
     border-color: var(--color-primario);
+}
+
+.btn-limpiar {
+    padding: 11px 14px;
+    border: 1px solid var(--color-borde);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--color-texto);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-limpiar:hover {
+    background: #f1f3f5;
 }
 
 .texto-contador {
@@ -102,10 +122,16 @@ thead {
 .ordenable {
     cursor: pointer;
     user-select: none;
+    transition: background-color 0.2s ease;
 }
 
 .ordenable:hover {
     background-color: #343a40;
+}
+
+.ordenable.activo {
+    background-color: #343a40;
+    color: #ffffff;
 }
 
 /* Estados de Interfaz */

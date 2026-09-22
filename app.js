@@ -14,6 +14,7 @@ const buscador = document.getElementById('buscador');
 const contadorTexto = document.getElementById('contador');
 const estadoCarga = document.getElementById('estado-carga');
 const estadoError = document.getElementById('estado-error');
+const botonLimpiarFiltro = document.getElementById('limpiar-filtro');
 
 //funcion para consumir la API
 async function obtenerProductos() {
@@ -68,6 +69,28 @@ function compararProductos(a, b, campo) {
     return String(valorA).localeCompare(String(valorB), 'es', { sensitivity: 'base' });
 }
 
+// Mapeo de nombres de columnas para mostrar en la tabla
+const titulosColumnas = {
+    title: 'Título',
+    category: 'Categoría',
+    price: 'Precio',
+    stock: 'Stock'
+};
+
+//funcion para actualizar el indicador de orden en los encabezados de la tabla
+function actualizarIndicadorOrden() {
+    document.querySelectorAll('.ordenable').forEach(th => {
+        const campo = th.dataset.columna;
+        const textoBase = titulosColumnas[campo] || campo;
+        const esActiva = ordenActual.campo === campo;
+
+        th.textContent = esActiva
+            ? `${textoBase} ${ordenActual.direccion === 'asc' ? '↑' : '↓'}`
+            : textoBase;
+
+        th.classList.toggle('activo', esActiva);
+    });
+}
 //funcion para ordenar productos por campo
 function ordenarProductos(campo) {
     const direccion = (
@@ -82,7 +105,14 @@ function ordenarProductos(campo) {
         return direccion === 'asc' ? resultado : -resultado;
     });
 
+    actualizarIndicadorOrden();
     renderizarTabla(productosMostrados);
+}
+
+//funcion para actualizar el boton de limpiar filtro
+function actualizarBotonLimpiar() {
+    const hayFiltro = buscador.value.trim() !== '';
+    botonLimpiarFiltro.classList.toggle('oculto', !hayFiltro);
 }
 
 //funcion para renderizar la tabla donde le entregamos un arreglo de productos y la renderiza en el DOM
@@ -128,7 +158,9 @@ function renderizarTabla(productos) {
 
 //funcion para filtrar los productos por nombre
 buscador.addEventListener('input', (evento) => {
-    const textoBusqueda = evento.target.value.toLowerCase();
+    const textoBusqueda = evento.target.value.trim().toLowerCase();
+
+    actualizarBotonLimpiar();
 
     const productosFiltrados = todosLosProductos.filter(producto =>
         producto.title.toLowerCase().includes(textoBusqueda)
@@ -138,6 +170,15 @@ buscador.addEventListener('input', (evento) => {
     renderizarTabla(productosFiltrados);
 });
 
+//funcion para limpiar el filtro de busqueda
+botonLimpiarFiltro.addEventListener('click', () => {
+    buscador.value = '';
+    actualizarBotonLimpiar();
+    renderizarTabla(todosLosProductos);
+    ordenActual = { campo: 'title', direccion: 'asc' };
+    actualizarIndicadorOrden();
+});
+
 //funcion para ordenar los productos al hacer click en el encabezado de la tabla
 document.querySelectorAll('.ordenable').forEach(th => {
     th.addEventListener('click', () => {
@@ -145,6 +186,9 @@ document.querySelectorAll('.ordenable').forEach(th => {
         ordenarProductos(campo);
     });
 });
+
+// Inicializar el indicador de orden al cargar la página
+actualizarIndicadorOrden();
 
 // Inicializar la carga de datos cuando el HTML esté listo
 document.addEventListener('DOMContentLoaded', obtenerProductos);

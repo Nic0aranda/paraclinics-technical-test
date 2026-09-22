@@ -15,7 +15,10 @@
 
         <!-- Buscador y contador de productos -->
         <section class="controles">
-            <input type="text" id="buscador" placeholder="Buscar producto por su nombre" autocomplete="off">
+            <div class="buscador-wrapper">
+                <input type="text" id="buscador" placeholder="Buscar producto por su nombre" autocomplete="off">
+                <button id="limpiar-filtro" type="button" class="btn-limpiar oculto">Eliminar filtro</button>
+            </div>
             <p id="contador" class="texto-contador">Cantidad de productos</p>
         </section>
 
