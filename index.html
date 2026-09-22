@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Productos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <main class="contenedor">
+        <header class="cabecera">
+            <h1>Catálogo de Productos</h1>
+        </header>
+
+        <!-- Buscador y contador de productos -->
+        <section class="controles">
+            <input type="text" id="buscador" placeholder="Buscar producto por su nombre" autocomplete="off">
+            <p id="contador" class="texto-contador">Cantidad de productos</p>
+        </section>
+
+        <!-- Contenedor responsivo para la tabla -->
+        <div id="contenedor-tabla" class="tabla-responsiva oculto">
+            <table id="tabla-productos">
+                <thead>
+                    <tr>
+                        <th>Imagen</th>
+                        <th class="ordenable" data-columna="title">Título</th>
+                        <th class="ordenable" data-columna="category">Categoría</th>
+                        <th class="ordenable" data-columna="price">Precio</th>
+                        <th class="ordenable" data-columna="stock">Stock</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpo-tabla">
+                    <!-- Las filas se inyectarán aquí con JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
