@@ -1,6 +1,6 @@
 //variables para consumo de productos
 let todosLosProductos = [];
-const URL = 'https://dummyjson.com/products';
+const URL_API = 'https://dummyjson.com/products';
 
 //variables DOM
 const cuerpoTabla = document.getElementById('cuerpo-tabla');
@@ -45,3 +45,42 @@ async function obtenerProductos() {
         estadoError.classList.remove('oculto');
     }
 }
+
+obtenerProductos();
+
+//funcion para renderizar la tabla donde le entregamos un arreglo de productos y la renderiza en el DOM
+function renderizarTabla(productos) {
+    // Limpiar el contenido actual de la tabla
+    cuerpoTabla.innerHTML = '';
+
+    // Actualizar el contador de resultados
+    contadorTexto.textContent = `Mostrando ${productos.length} resultados`;
+
+    // Si se busca algo y no hay resultados, mostrar un mensaje
+    if (productos.length === 0) {
+        cuerpoTabla.innerHTML = '<tr><td colspan="5" class="text-centro">No se encontraron coincidencias.</td></tr>';
+        return;
+    }
+
+    // Formatear moneda a CLP
+    const formateadorMoneda = new Intl.NumberFormat('es-CL', {
+        style: 'currency',
+        currency: 'CLP'
+    });
+
+    // Crear las filas dinámicamente
+    productos.forEach(producto => {
+        const fila = document.createElement('tr');
+        
+        fila.innerHTML = `
+            <td><img src="${producto.thumbnail}" alt="${producto.title}" class="img-miniatura"></td>
+            <td>${producto.title}</td>
+            <td>${producto.category}</td>
+            <td>${formateadorMoneda.format(producto.price)}</td>
+            <td>${producto.stock}</td>
+        `;
+        
+        cuerpoTabla.appendChild(fila);
+    });
+}
+
