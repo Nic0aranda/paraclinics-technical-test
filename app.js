@@ -111,6 +111,7 @@ function ordenarProductos(campo) {
 
 //funcion para actualizar el boton de limpiar filtro
 function actualizarBotonLimpiar() {
+    if (!buscador || !botonLimpiarFiltro) return;
     const hayFiltro = buscador.value.trim() !== '';
     botonLimpiarFiltro.classList.toggle('oculto', !hayFiltro);
 }
@@ -156,28 +157,31 @@ function renderizarTabla(productos) {
     });
 }
 
-//funcion para filtrar los productos por nombre
-buscador.addEventListener('input', (evento) => {
-    const textoBusqueda = evento.target.value.trim().toLowerCase();
+//funcion para filtrar productos por nombre
+if (buscador) {
+    buscador.addEventListener('input', (evento) => {
+        const textoBusqueda = evento.target.value.trim().toLowerCase();
 
-    actualizarBotonLimpiar();
+        actualizarBotonLimpiar();
 
-    const productosFiltrados = todosLosProductos.filter(producto =>
-        producto.title.toLowerCase().includes(textoBusqueda)
-    );
+        const productosFiltrados = todosLosProductos.filter(producto =>
+            producto.title.toLowerCase().includes(textoBusqueda)
+        );
 
-    // Renderizamos la tabla solo con los que coinciden
-    renderizarTabla(productosFiltrados);
-});
+        renderizarTabla(productosFiltrados);
+    });
+}
 
 //funcion para limpiar el filtro de busqueda
-botonLimpiarFiltro.addEventListener('click', () => {
-    buscador.value = '';
-    actualizarBotonLimpiar();
-    renderizarTabla(todosLosProductos);
-    ordenActual = { campo: 'title', direccion: 'asc' };
-    actualizarIndicadorOrden();
-});
+if (botonLimpiarFiltro && buscador) {
+    botonLimpiarFiltro.addEventListener('click', () => {
+        buscador.value = '';
+        actualizarBotonLimpiar();
+        renderizarTabla(todosLosProductos);
+        ordenActual = { campo: 'title', direccion: 'asc' };
+        actualizarIndicadorOrden();
+    });
+}
 
 //funcion para ordenar los productos al hacer click en el encabezado de la tabla
 document.querySelectorAll('.ordenable').forEach(th => {
@@ -191,4 +195,8 @@ document.querySelectorAll('.ordenable').forEach(th => {
 actualizarIndicadorOrden();
 
 // Inicializar la carga de datos cuando el HTML esté listo
-document.addEventListener('DOMContentLoaded', obtenerProductos);
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', obtenerProductos);
+} else {
+    obtenerProductos();
+}
