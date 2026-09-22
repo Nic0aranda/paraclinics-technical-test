@@ -7,6 +7,8 @@ const cuerpoTabla = document.getElementById('cuerpo-tabla');
 const contenedorTabla = document.getElementById('contenedor-tabla');
 const buscador = document.getElementById('buscador');
 const contadorTexto = document.getElementById('contador');
+const estadoCarga = document.getElementById('estado-carga');
+const estadoError = document.getElementById('estado-error');
 
 //funcion para consumir la API
 async function obtenerProductos() {
@@ -84,3 +86,4 @@ function renderizarTabla(productos) {
     });
 }
 
+//a
