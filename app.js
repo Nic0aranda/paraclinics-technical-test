@@ -67,23 +67,25 @@ function renderizarTabla(productos) {
     // Formatear moneda a CLP
     const formateadorMoneda = new Intl.NumberFormat('es-CL', {
         style: 'currency',
-        currency: 'CLP'
+        currency: 'CLP',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
     });
 
     // Crear las filas dinámicamente
     productos.forEach(producto => {
+        const precioCLP = producto.price * 980;
         const fila = document.createElement('tr');
-        
+
         fila.innerHTML = `
             <td><img src="${producto.thumbnail}" alt="${producto.title}" class="img-miniatura"></td>
             <td>${producto.title}</td>
             <td>${producto.category}</td>
-            <td>${formateadorMoneda.format(producto.price)}</td>
+            <td>${formateadorMoneda.format(precioCLP)}</td>
             <td>${producto.stock}</td>
         `;
-        
+
         cuerpoTabla.appendChild(fila);
     });
 }
 
-//a
